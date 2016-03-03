@@ -3,30 +3,31 @@ require 'optparse'
 class DNSLookup
   def initialize
     @type = ''
-    @domain = ARGV.shift
 
     parse_options
+    @domain = ARGV.shift
+
     setup_query_servers
     lookup_with_options
   end
 
   def parse_options
     OptionParser.new do |opt|
-      opt.banner = "Usage lookup [options]"
+      opt.banner = "Usage: dnslookup <domain name> [options]"
 
-      opt.on("-mx", "--email", "Return MX records") do |v|
+      opt.on("-m", "--mx", "Return MX records") do |v|
         @type = 'mx'
       end
 
-      opt.on("-a", "--address", "Return A type records") do |v|
+      opt.on("-a", "--aname", "Return A name records") do |v|
         @type = 'a'
       end
 
-      opt.on("-c", "--alias", "Return C type records") do |v|
+      opt.on("-c", "--cname", "Return C name records") do |v|
         @type = 'c'
       end
 
-      opt.on("-txt", "--text", "Return TXT type records") do |v|
+      opt.on("-t", "--txt", "Return TXT records") do |v|
         @type = 'txt'
       end
 
