@@ -1,6 +1,9 @@
 require 'optparse'
 
+# DNSLookup is the main class.
 class DNSLookup
+
+  # Initializes the core variables and calls the driver methods.
   def initialize
     @type = ''
 
@@ -8,9 +11,10 @@ class DNSLookup
     @domain = ARGV.shift
 
     setup_query_servers
-    lookup_with_options
+    query_with_options
   end
 
+  # Parses the options passed from command prompt.
   def parse_options
     OptionParser.new do |opt|
       opt.banner = "Usage: dnslookup <domain name> [options]"
@@ -42,6 +46,7 @@ class DNSLookup
     end.parse!
   end
 
+  # Sets up the DNS servers to query.
   def setup_query_servers
     @servers = []
 
@@ -52,7 +57,8 @@ class DNSLookup
     end
   end
 
-  def lookup_with_options
+  # Query name servers for specific records or entire zone if @type is blank or unknown.
+  def query_with_options
     case @type
     when 'mx'
       query_command('mx')
@@ -67,6 +73,7 @@ class DNSLookup
     end
   end
 
+  # Query command to execute.
   def query_command(type)
     @servers.each do |server|
       if type == 'any'
