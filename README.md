@@ -26,8 +26,20 @@ Lookup DNS records:
 ```bash
 $ dnslookup <domain name> [options]
 ```
+##### Options:
+  `-m` or `--mx` will return only MX records.
 
-Help with usage:
+  `-a` or `--aname` will return only A name records.
+
+  `-c` or `--cname` will return only C name records.
+
+  `-t` or `--txt` will return only TXT records.
+
+  `-s` or `--server=IP` will query specific name server IP.
+
+  `-h` or `--help` will output this help in your shell.
+
+Help with usage and options:
 ```bash
 $ dnslookup -h
 ```
