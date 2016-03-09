@@ -2,7 +2,7 @@
 
 # dnslookup
 
-dnslookup is a DNS record query gem written in Ruby. dnslookup automatically queries multiple public DNS servers or allows you to query a specific DNS server.
+dnslookup is a DNS record query CLI gem written in Ruby. dnslookup automatically queries multiple public DNS servers or allows you to query a specific DNS server.
 
 ## Installation
 

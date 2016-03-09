@@ -23,7 +23,7 @@ class DNSLookupTest < Minitest::Test
   def test_a_name_lookup
     ARGV[1] = '-a'
     call_class
-    assert_includes @out, '65.196.188.57'
+    assert_includes @out, '65.196.188'
   end
 
   def test_t_name_lookup
