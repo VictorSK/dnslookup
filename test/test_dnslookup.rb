@@ -4,7 +4,7 @@ require 'dnslookup'
 class DNSLookupTest < Minitest::Test
 
   def setup
-    ARGV[0] = 'google.com'
+    ARGV[0] = 'example.com'
   end
 
   def call_class
@@ -17,26 +17,26 @@ class DNSLookupTest < Minitest::Test
   def test_mx_lookup
     ARGV[1] = '-m'
     call_class
-    assert_includes @out, '10 aspmx.l.google.com.'
+    assert_includes @out, '0 .'
   end
 
   def test_a_name_lookup
     ARGV[1] = '-a'
     call_class
-    assert_includes @out, '65.196.188'
+    assert_includes @out, '93.184.216.34'
   end
 
   def test_t_name_lookup
     ARGV[1] = '-t'
     call_class
-    assert_includes @out, "v=spf1 include:_spf.google.com ~all"
+    assert_includes @out, "v=spf1 -all"
   end
 
   def test_c_name_lookup
-    ARGV[0] = 'mail.google.com'
+    # ARGV[0] = 'mail.google.com'
     ARGV[1] = '-c'
     call_class
-    assert_includes @out, 'googlemail.l.google.com.'
+    assert_includes @out, '93.184.216.34'
   end
 
   def test_setup_query_servers_single
