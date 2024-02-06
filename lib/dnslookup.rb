@@ -79,7 +79,7 @@ class DNSLookup
       if type == 'any'
         check = `dig @#{server} #{type} #{@domain}`
       else
-       check = `dig @#{server} #{@domain} #{type} +short`
+        check = `dig @#{server} #{@domain} #{type} +short`
       end
 
       puts "Checking servers: #{server}"
