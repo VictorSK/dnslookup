@@ -9,7 +9,7 @@ class DNSLookupTest < Minitest::Test
 
   def call_class
     @out, @err = capture_io do
-      @dnslookup = DNSLookup.new
+      @dnslookup = DNSLookup::Query.new
     end
 
   end

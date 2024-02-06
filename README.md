@@ -1,12 +1,14 @@
-[![Gem Version](https://badge.fury.io/rb/dnslookup.svg)](https://badge.fury.io/rb/dnslookup)
-
 # dnslookup
+
+[![Gem Version](https://badge.fury.io/rb/dnslookup.svg)](https://badge.fury.io/rb/dnslookup)
 
 dnslookup is a DNS record query CLI gem written in Ruby. dnslookup automatically queries multiple public DNS servers or allows you to query a specific DNS server.
 
+Please use [GitHub Issues](https://github.com/VictorSK/dnslookup/issues) to report bugs.
+
 ## Installation
 
-Add this line to your application's Gemfile:
+To add dnslookup to an existing project, add this line to your projects's Gemfile:
 
 ```ruby
 gem 'dnslookup'
@@ -14,42 +16,52 @@ gem 'dnslookup'
 
 And then execute:
 
-    $ bundle
+```bash
+bundle install
+```
 
-Or install it yourself as:
+Or to install locally:
 
-    $ gem install dnslookup
+```bash
+gem install dnslookup
+```
 
 ## Usage
 
 Lookup DNS records:
+
 ```bash
-$ dnslookup <domain name> [options]
+dnslookup <domain name> [options]
 ```
-##### Options:
-  `-m` or `--mx` will return only MX records.
 
-  `-a` or `--aname` will return only A name records.
+### Options
 
-  `-c` or `--cname` will return only C name records.
+`-m` or `--mx` will return only MX records.
 
-  `-t` or `--txt` will return only TXT records.
+`-a` or `--aname` will return only A name records.
 
-  `-s` or `--server=IP` will query specific name server IP.
+`-c` or `--cname` will return only C name records.
 
-  `-h` or `--help` will output this help in your shell.
+`-t` or `--txt` will return only TXT records.
+
+`-s` or `--server=IP` will query specific name server IP.
+
+`-h` or `--help` will output this help in your shell.
 
 Help with usage and options:
+
 ```bash
-$ dnslookup -h
+dnslookup -h
 ```
+
 ## Contributing
 
-Bug reports and pull requests are welcome on [GitHub](https://github.com/VictorSK/dnslookup). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on [GitHub](https://github.com/VictorSK/dnslookup). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the terms specified in the [CODE OF CONDUCT](CODE_OF_CONDUCT). It's code, lets be safe and have fun!
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+dnslookup is copyright © 2016-2024 Victor S. Keenan. It is free software and may be redistributed under the terms specified in the [LICENSE](LICENSE) file.
 
-## Crafted With Love
-Coded crafted by me, [Victor S. Keenan](http://www.victorkeenan.com). Find me on Twitter [@VictorSK](https://twitter.com/victorsk).
+## Coded With Love
+
+Coded crafted by me, [Victor S. Keenan](https://www.victorkeenan.com). Find me on Twitter [@VictorSK](https://twitter.com/victorsk) or [hire me](https://www.inspyre.com) to design, develop, and grow your product or service.

@@ -2,4 +2,4 @@
 
 require 'dnslookup'
 
-DNSLookup.new
+DNSLookup::Query.new
