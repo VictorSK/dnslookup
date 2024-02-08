@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require_relative "dnslookup/version"
 require 'optparse'
 
 module DNSLookup
+  class Error < StandardError; end
   class Query
     DEFAULT_SERVERS = ['8.8.8.8', '8.8.4.4'].freeze
 
