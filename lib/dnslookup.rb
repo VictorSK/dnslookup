@@ -9,7 +9,7 @@ module DNSLookup
     DEFAULT_SERVERS = ['8.8.8.8', '8.8.4.4'].freeze
 
     def initialize
-      @type = ''
+      @type = []
       @single_server = nil
       @domain = ARGV.shift
 
@@ -21,15 +21,19 @@ module DNSLookup
     def parse_options
       OptionParser.new do |opt|
         opt.banner = "Usage: dnslookup <domain name> [options]"
-        opt.on("-m", "--mx", "Return MX records") { @type = 'mx' }
-        opt.on("-a", "--aname", "Return A name records") { @type = 'a' }
-        opt.on("-c", "--cname", "Return C name records") { @type = 'c' }
-        opt.on("-t", "--txt", "Return TXT records") { @type = 'txt' }
+        opt.on("-m", "--mx", "Return MX records") { @type << 'mx' }
+        opt.on("-a", "--aname", "Return A name records") { @type << 'a' }
+        opt.on("-c", "--cname", "Return C name records") { @type << 'c' }
+        opt.on("-t", "--txt", "Return TXT records") { @type << 'txt' }
         opt.on("-s", "--server=SERVER", "Specify specific name server to query") do |v|
           @single_server = v
         end
         opt.on("-h", "--help", "Prints this help") do
           puts opt
+          exit
+        end
+        opt.on("-v", "--version", "Prints version") do
+          puts DNSLookup::VERSION
           exit
         end
       end.parse!
@@ -46,11 +50,10 @@ module DNSLookup
     end
 
     def query_with_options
-      case @type
-      when 'mx', 'a', 'c', 'txt'
-        query_command(@type)
-      else
+      if @type.empty?
         query_command('any')
+      else
+        query_command(@type)
       end
     end
 
@@ -58,13 +61,19 @@ module DNSLookup
       @servers.each do |server|
         if type == 'any'
           check = `dig @#{server} #{type} #{@domain}`
-        else
-          check = `dig @#{server} #{@domain} #{type} +short`
-        end
 
-        puts "Checking servers: #{server}"
-        puts check
-        puts
+          puts "Checking servers: #{server} root domain records"
+          puts check
+          puts
+        else
+          @type.each do |type|
+            check = `dig @#{server} #{@domain} #{type.upcase} +short`
+
+            puts "Checking servers: #{server} for #{type.upcase} records"
+            puts check
+            puts
+          end
+        end
       end
     end
   end
