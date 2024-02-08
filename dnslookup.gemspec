@@ -17,7 +17,6 @@ Gem::Specification.new do |spec|
     "bug_tracker_uri" => "https://github.com/VictorSK/dnslookup/issues/",
     "changelog_uri" => "https://github.com/VictorSK/dnslookup/blob/main/CHANGELOG.md",
     "documentation_uri" => "https://github.com/VictorSK/dnslookup/blob/main/README.md",
-    "homepage_uri" => "https://www.victorkeenan.com/projects/dnslookup/",
     "source_code_uri" => "https://github.com/VictorSK/dnslookup/",
     "rubygems_mfa_required" => "true"
   }

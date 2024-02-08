@@ -1,17 +1,22 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 require 'optparse'
 
-# DNSLookup gem namespace.
 module DNSLookup
-  # DNSLookup::Query class is the main.
   class Query
+    DEFAULT_SERVERS = ['8.8.8.8', '8.8.4.4'].freeze
 
-    # Initializes the core variables and calls the driver methods.
     def initialize
       @type = ''
+      @single_server = nil
+      @domain = ARGV.shift
 
-    # Parses the options passed from command prompt.
+      parse_options
+      setup_query_servers
+      query_with_options
+    end
+
+    def parse_options
       OptionParser.new do |opt|
         opt.banner = "Usage: dnslookup <domain name> [options]"
         opt.on("-m", "--mx", "Return MX records") { @type = 'mx' }
@@ -26,42 +31,27 @@ module DNSLookup
           exit
         end
       end.parse!
-
-      # Get domain from command line arguments.
-      @domain = ARGV.shift
-
-      setup_query_servers
-      query_with_options
     end
 
-    # Sets up the DNS servers to query.
     def setup_query_servers
       @servers = []
 
       if @single_server
         @servers << @single_server
       else
-        @servers = ['8.8.8.8', '8.8.4.4']
+        @servers = DEFAULT_SERVERS
       end
     end
 
-    # Query name servers for specific records or entire zone if @type is blank or unknown.
     def query_with_options
       case @type
-      when 'mx'
-        query_command('mx')
-      when 'a'
-        query_command('a')
-      when 'c'
-        query_command('c')
-      when 'txt'
-        query_command('txt')
+      when 'mx', 'a', 'c', 'txt'
+        query_command(@type)
       else
         query_command('any')
       end
     end
 
-    # Query command to execute.
     def query_command(type)
       @servers.each do |server|
         if type == 'any'
