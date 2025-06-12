@@ -21,6 +21,6 @@ Gem::Specification.new do |spec|
   spec.metadata["documentation_uri"] = "https://github.com/VictorSK/dnslookup/blob/main/README.md"
   spec.metadata["rubygems_mfa_required"] = 'true'
   spec.files = Dir["lib/**/*.rb"]
-  # spec.executables            = 'dnslookup'
+  spec.executables            = 'dnslookup'
   # spec.require_paths          = ["lib"]
 end
