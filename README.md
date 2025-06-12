@@ -64,11 +64,11 @@ dnslookup -h
 
 ## Contributing
 
-Bug reports and pull requests are welcome on [GitHub](https://github.com/VictorSK/dnslookup). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the terms specified in the [CODE OF CONDUCT](CODE_OF_CONDUCT). It's code, let's be safe and have fun!
+Bug reports and pull requests are welcome on [GitHub](https://github.com/VictorSK/dnslookup). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the terms specified in the [CODE OF CONDUCT](CODE_OF_CONDUCT.md). It's code, let's be safe and have fun!
 
 ## License
 
-dnslookup is copyright © 2016-2025 Victor S. Keenan. It is free software and may be redistributed under the terms specified in the [LICENSE](LICENSE) file.
+dnslookup is copyright © 2016-2025 Victor S. Keenan. It is free software and may be redistributed under the terms specified in the [LICENSE](LICENSE.txt) file.
 
 ## Coded With Love
 
