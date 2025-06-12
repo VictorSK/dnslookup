@@ -2,7 +2,15 @@
 
 The noteworthy updates for each dnslookup version are included here. For a complete changelog, see the git history.
 
-## [0.2.0] - February 08, 2023
+## [0.3.0] - June 12, 2025
+
+### Changes
+
+- Refactor gem source
+- Refactor tests
+- General cleanup and maintenance
+
+## [0.2.0] - February 08, 2024
 
 ### New Features
 

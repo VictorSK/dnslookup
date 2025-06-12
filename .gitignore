@@ -1,7 +1,12 @@
 *.gem
 .bundle
+.DS_Store
 Gemfile.lock
-coverage
-doc
-pkg
-tmp/
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/

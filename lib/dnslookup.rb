@@ -13,6 +13,12 @@ module DNSLookup
       @single_server = nil
       @domain = ARGV.shift
 
+      if @domain.nil? || @domain.start_with?('-')
+        puts "Error: You must specify a domain name.\n\n"
+        puts "Usage: dnslookup <domain name> [options]"
+        exit 1
+      end
+
       parse_options
       setup_query_servers
       query_with_options
@@ -20,7 +26,10 @@ module DNSLookup
 
     def parse_options
       OptionParser.new do |opt|
-        opt.banner = "Usage: dnslookup <domain name> [options]"
+        opt.banner = <<~BANNER
+          Usage: dnslookup <domain name> [options]
+          Example: dnslookup example.com -a -m -s8.8.8.8
+        BANNER
         opt.on("-m", "--mx", "Return MX records") { @type << 'mx' }
         opt.on("-a", "--aname", "Return A name records") { @type << 'a' }
         opt.on("-c", "--cname", "Return C name records") { @type << 'c' }
@@ -28,6 +37,7 @@ module DNSLookup
         opt.on("-s", "--server=SERVER", "Specify specific name server to query") do |v|
           @single_server = v
         end
+        opt.on("-A", "--all", "Return all record types") { @type = %w[a mx c txt] }
         opt.on("-h", "--help", "Prints this help") do
           puts opt
           exit
@@ -57,22 +67,14 @@ module DNSLookup
       end
     end
 
-    def query_command(type)
+    def query_command(types)
       @servers.each do |server|
-        if type == 'any'
-          check = `dig @#{server} #{type} #{@domain}`
-
-          puts "Checking servers: #{server} root domain records"
-          puts check
+        Array(types).each do |type|
+          record_type = type == 'any' ? '' : type.upcase
+          check = `dig @#{server} #{@domain} #{record_type} +short`
+          puts "Checking server: #{server} for #{record_type.empty? ? 'ALL' : record_type} records"
+          puts check.empty? ? "(no records found)" : check
           puts
-        else
-          @type.each do |type|
-            check = `dig @#{server} #{@domain} #{type.upcase} +short`
-
-            puts "Checking servers: #{server} for #{type.upcase} records"
-            puts check
-            puts
-          end
         end
       end
     end
