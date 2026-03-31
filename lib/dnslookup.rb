@@ -2,26 +2,35 @@
 
 require_relative "dnslookup/version"
 require 'optparse'
+require 'open3'
 
 module DNSLookup
   class Error < StandardError; end
-  class Query
+  class CLI
     DEFAULT_SERVERS = ['8.8.8.8', '8.8.4.4'].freeze
 
-    def initialize
+    def self.run(argv: ARGV, out: $stdout)
+      new(argv: argv, out: out).run
+    end
+
+    def initialize(argv: ARGV, out: $stdout)
+      @argv = argv.dup
+      @out = out
       @type = []
       @single_server = nil
-      @domain = ARGV.shift
+    end
 
-      if @domain.nil? || @domain.start_with?('-')
-        puts "Error: You must specify a domain name.\n\n"
-        puts "Usage: dnslookup <domain name> [options]"
+    def run
+      parse_options
+      domain = @argv.shift
+
+      if domain.nil? || domain.start_with?('-')
+        @out.puts "Error: You must specify a domain name.\n\n"
+        @out.puts "Usage: dnslookup <domain name> [options]"
         exit 1
       end
 
-      parse_options
-      setup_query_servers
-      query_with_options
+      Query.new(domain: domain, types: @type, servers: query_servers, out: @out).run
     end
 
     def parse_options
@@ -39,29 +48,41 @@ module DNSLookup
         end
         opt.on("-A", "--all", "Return all record types") { @type = %w[a mx c txt] }
         opt.on("-h", "--help", "Prints this help") do
-          puts opt
+          @out.puts opt
           exit
         end
         opt.on("-v", "--version", "Prints version") do
-          puts DNSLookup::VERSION
+          @out.puts DNSLookup::VERSION
           exit
         end
-      end.parse!
+      end.parse!(@argv)
     end
 
-    def setup_query_servers
-      @servers = []
+    def query_servers
+      return [@single_server] if @single_server
 
-      if @single_server
-        @servers << @single_server
-      else
-        @servers = DEFAULT_SERVERS
-      end
+      DEFAULT_SERVERS
+    end
+  end
+
+  class Query
+    RECORD_TYPES = {
+      'a' => 'A',
+      'mx' => 'MX',
+      'c' => 'CNAME',
+      'txt' => 'TXT'
+    }.freeze
+
+    def initialize(domain:, types: [], servers: CLI::DEFAULT_SERVERS, out: $stdout)
+      @domain = domain
+      @type = types
+      @servers = servers
+      @out = out
     end
 
-    def query_with_options
+    def run
       if @type.empty?
-        query_command('any')
+        query_command('a')
       else
         query_command(@type)
       end
@@ -70,13 +91,32 @@ module DNSLookup
     def query_command(types)
       @servers.each do |server|
         Array(types).each do |type|
-          record_type = type == 'any' ? '' : type.upcase
-          check = `dig @#{server} #{@domain} #{record_type} +short`
-          puts "Checking server: #{server} for #{record_type.empty? ? 'ALL' : record_type} records"
-          puts check.empty? ? "(no records found)" : check
-          puts
+          record_type = normalize_record_type(type)
+          check, error, status = Open3.capture3('dig', "@#{server}", @domain, record_type, '+short')
+          @out.puts "Checking server: #{server} for #{record_type} records"
+          @out.puts format_lookup_result(check: check, error: error, status: status)
+          @out.puts
         end
       end
+    rescue Errno::ENOENT
+      @out.puts "(query failed: dig command not found)"
+      @out.puts
+    end
+
+    private
+
+    def normalize_record_type(type)
+      RECORD_TYPES.fetch(type.to_s.downcase, type.to_s.upcase)
+    end
+
+    def format_lookup_result(check:, error:, status:)
+      return check if status.success? && !check.empty?
+      return "(no records found)" if status.success?
+
+      error_message = error.to_s.strip
+      return "(query failed)" if error_message.empty?
+
+      "(query failed: #{error_message})"
     end
   end
 end

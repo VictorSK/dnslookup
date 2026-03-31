@@ -20,7 +20,15 @@ Gem::Specification.new do |spec|
   spec.metadata["bug_tracker_uri"] = "https://github.com/VictorSK/dnslookup/issues/"
   spec.metadata["documentation_uri"] = "https://github.com/VictorSK/dnslookup/blob/main/README.md"
   spec.metadata["rubygems_mfa_required"] = 'true'
-  spec.files = Dir["lib/**/*.rb"]
-  spec.executables            = 'dnslookup'
-  # spec.require_paths          = ["lib"]
+  spec.files = %w[
+    CHANGELOG.md
+    LICENSE.txt
+    README.md
+    bin/dnslookup
+    lib/dnslookup.rb
+    lib/dnslookup/version.rb
+  ]
+  spec.bindir                 = 'bin'
+  spec.executables            = ['dnslookup']
+  spec.require_paths          = ["lib"]
 end
